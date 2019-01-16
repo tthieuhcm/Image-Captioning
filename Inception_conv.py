@@ -1,13 +1,11 @@
-import torch
 import torch.nn.functional as F
 
 
-def Inception_forward(inception_v3, image):
+def inception_forward(inception_v3, image):
     if inception_v3.transform_input:
-        image_ch0 = torch.unsqueeze(image[:, 0], 1) * (0.229 / 0.5) + (0.485 - 0.5) / 0.5
-        image_ch1 = torch.unsqueeze(image[:, 1], 1) * (0.224 / 0.5) + (0.456 - 0.5) / 0.5
-        image_ch2 = torch.unsqueeze(image[:, 2], 1) * (0.225 / 0.5) + (0.406 - 0.5) / 0.5
-        image = torch.cat((image_ch0, image_ch1, image_ch2), 1)
+        image[:, 0] = image[:, 0] * (0.229 / 0.5) + (0.485 - 0.5) / 0.5
+        image[:, 1] = image[:, 1] * (0.224 / 0.5) + (0.456 - 0.5) / 0.5
+        image[:, 2] = image[:, 2] * (0.225 / 0.5) + (0.406 - 0.5) / 0.5
     # 299 x 299 x 3
     image = inception_v3.Conv2d_1a_3x3(image)
     # 149 x 149 x 32

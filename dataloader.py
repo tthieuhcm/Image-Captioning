@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 class MSCOCO_Dataset(Dataset):
     """MSCOCO dataset"""
 
-    def __init__(self, annotation_file, root_dir, transform=None):
+    def __init__(self, annotation_file, root_dir, transform=None, num_examples=10):
         """
         Args:
             annotation_file (string): Path to the json file with annotations.
@@ -27,13 +27,15 @@ class MSCOCO_Dataset(Dataset):
 
             self.all_img_name_vector.append(full_coco_image_path)
             self.all_captions.append(caption)
+        self.all_captions = self.all_captions[:num_examples]
+        self.all_img_name_vector = self.all_img_name_vector[:num_examples]
 
     def __len__(self):
         return len(self.all_img_name_vector)
 
     def __getitem__(self, idx):
         img_name = self.all_img_name_vector[idx]
-        image = Image.open(img_name)
+        image = Image.open(img_name).convert('RGB')
         caption = self.all_captions[idx]
 
         if self.transform:
